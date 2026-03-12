@@ -168,13 +168,21 @@ fi
 
 echo -e "${GREEN}${BOLD}[+]${RESET} Installation completed."
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TOOL_PATH="$SCRIPT_DIR/WXxploit.py"
+CMD_PATH="/usr/local/bin/wxxploit"
+
 read -p "$(echo -e "${CYAN}${BOLD}[*]${RESET} Add '${RED}wxxploit${RESET}' command to system? (Y/N) > ")" INSTALL_CMD
 
-if [[ "$INSTALL_CMD" =~ ^[Yy]$ ]]; then
+while [[ ! "$INSTALL_CMD" =~ ^[YyNn]$ ]]; do
+    echo -e "${RED}${BOLD}[-]${RESET} Please enter 'Y' or 'N'."
+    read -p "$(echo -e "${CYAN}${BOLD}[*]${RESET} Add '${RED}wxxploit${RESET}' command to system? (Y/N) > ")" INSTALL_CMD
+done
 
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  TOOL_PATH="$SCRIPT_DIR/WXxploit.py"
-  CMD_PATH="/usr/local/bin/WXxploit"
+if [[ "$INSTALL_CMD" =~ ^[Yy]$ ]]; then
+  if [ -f "$CMD_PATH" ]; then
+    echo -e "${YELLOW}${BOLD}[!]${RESET} The command 'wxxploit' already exists. Overwriting..."
+  fi
 
   echo -e "${CYAN}${BOLD}[*]${RESET} Creating launcher..."
 
