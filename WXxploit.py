@@ -49,9 +49,7 @@ builtins.input = global_input
 
 def is_valid_ip_or_hostname(value: str) -> bool:
     ip_pattern = r"^(?:\d{1,3}\.){3}\d{1,3}$"
-
     hostname_pattern = r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(?:\.[A-Za-z]{2,})+$"
-
     if re.match(ip_pattern, value):
         return all(0 <= int(part) <= 255 for part in value.split('.'))
 
