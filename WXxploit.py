@@ -18,7 +18,7 @@ from colorama import *
 
 gradient_colors = Colors.red_to_white
 gradient_colors2 = Colors.green_to_cyan
-gradient_colors3 = Colors.yellow_to_red
+gradient_colors3 = Colors.blue_to_cyan
 
 def clear_screen():
     os.system("cls" if platform.system() == "Windows" else "clear")
@@ -38,7 +38,7 @@ original_input = builtins.input
 def global_input(prompt=""):
     user_input = original_input(prompt)
     if user_input.strip().lower() in ("exit", "quit"):
-        Write.Print("\n[*] Exiting", gradient_colors3, interval=0.03)
+        Write.Print("[*] Exiting", gradient_colors3, interval=0.03)
         Write.Print(" WXxploit...", gradient_colors, interval=0.03)
         time.sleep(1)
         sys.exit(0)
@@ -54,6 +54,31 @@ def is_valid_ip_or_hostname(value: str) -> bool:
         return all(0 <= int(part) <= 255 for part in value.split('.'))
 
     return bool(re.match(hostname_pattern, value))
+
+def startup_message(message="[*] Starting WXxploit", duration=3.0, speed=0.05):
+    frames = ["|", "/", "-", "\\"]
+    dots = ["", ".", "..", "..."]
+    start = time.time()
+    i = 0
+    j = 0
+    try:
+        while (time.time() - start) < duration:
+            spin = frames[i % len(frames)]
+            dot = dots[j % len(dots)]
+            text = f"{message}{dot} {spin}"
+            colored = Colorate.Horizontal(gradient_colors, text)
+            sys.stdout.write("\r" + colored)
+            sys.stdout.flush()
+            time.sleep(speed)
+            i += 1
+            if i % 4 == 0:
+                j += 1
+        sys.stdout.flush()
+    except KeyboardInterrupt:
+        sys.stdout.write("\n"); sys.stdout.flush()
+        
+startup_message("[*] Starting WXxploit", duration=3.0, speed=0.05)
+clear_screen()
 
 WXxploit = """
  █     █░▒██   ██▒▒██   ██▒ ██▓███   ██▓     ▒█████   ██▓▄▄▄█████▓
