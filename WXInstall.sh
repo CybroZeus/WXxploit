@@ -49,14 +49,14 @@ for p in "WXxploit.py"; do
   [ -f "$p" ] && chmod +x "$p" 2>/dev/null || true
 done
 
-echo -e "${CYAN}${BOLD}[*]${RESET} Updating package lists..."
+echo -e "${BLUE}${BOLD}[*]${RESET} Updating package lists..."
 
 if ! apt-get update -y >/dev/null 2>&1; then
   echo -e "${YELLOW}${BOLD}[!]${RESET} apt-get update failed — retrying..."
   apt-get update || { echo -e "${RED}${BOLD}[-]${RESET} apt-get update failed."; exit 1; }
 fi
 
-echo -e "${CYAN}${BOLD}[*]${RESET} Installing required packages..."
+echo -e "${BLUE}${BOLD}[*]${RESET} Installing required packages..."
 
 apt-get install -y python3 python3-venv python3-pip build-essential wget git >/dev/null 2>&1 || {
   echo -e "${YELLOW}${BOLD}[!]${RESET} Some packages failed, retrying..."
@@ -94,7 +94,7 @@ check_and_install_pkg() {
 
 }
 
-echo -e "${CYAN}${BOLD}[*]${RESET} Checking & installing packages..."
+echo -e "${BLUE}${BOLD}[*]${RESET} Checking & installing packages..."
 
 for pkg in "${!PKGS[@]}"; do
   check_and_install_pkg "$pkg" "${PKGS[$pkg]}" || true
@@ -103,9 +103,9 @@ done
 VENV_DIR="venv"
 
 if [ -d "$VENV_DIR" ]; then
-  echo -e "${CYAN}${BOLD}[*]${RESET} Virtualenv exists, reusing..."
+  echo -e "${BLUE}${BOLD}[*]${RESET} Virtualenv exists, reusing..."
 else
-  echo -e "${CYAN}${BOLD}[*]${RESET} Creating Python virtual environment..."
+  echo -e "${BLUE}${BOLD}[*]${RESET} Creating Python virtual environment..."
   python3 -m venv "$VENV_DIR" || {
     echo -e "${RED}${BOLD}[-]${RESET} Failed to create virtualenv."
     exit 1
@@ -114,7 +114,7 @@ fi
 
 source "$VENV_DIR/bin/activate"
 
-echo -e "${CYAN}${BOLD}[*]${RESET} Upgrading pip..."
+echo -e "${BLUE}${BOLD}[*]${RESET} Upgrading pip..."
 
 python3 -m pip install --upgrade pip >/dev/null 2>&1 || {
   echo -e "${YELLOW}${BOLD}[!]${RESET} pip upgrade warning..."
@@ -126,7 +126,7 @@ python3 -m pip install --upgrade pip >/dev/null 2>&1 || {
 
 PY_PKGS=(colorama pystyle)
 
-echo -e "${CYAN}${BOLD}[*]${RESET} Installing Python packages..."
+echo -e "${BLUE}${BOLD}[*]${RESET} Installing Python packages..."
 
 python3 -m pip install "${PY_PKGS[@]}" >/dev/null 2>&1 || {
   echo -e "${YELLOW}${BOLD}[!]${RESET} pip retry..."
@@ -136,29 +136,21 @@ python3 -m pip install "${PY_PKGS[@]}" >/dev/null 2>&1 || {
   }
 }
 
-echo -e "${CYAN}${BOLD}[*]${RESET} Tools status:"
+echo -e "${BLUE}${BOLD}[*]${RESET} Tools status:"
 
 for pkg in "${!PKGS[@]}"; do
-
   cmd="${PKGS[$pkg]}"
   path=$(command -v "$cmd" 2>/dev/null || true)
-
   if [[ -n "$path" ]]; then
     echo -e "    ${GREEN}${BOLD}[>]${RESET} $pkg -> $path"
   else
     echo -e "    ${YELLOW}${BOLD}[!]${RESET} $pkg missing."
   fi
-
 done
 
-echo -e "${CYAN}${BOLD}[*]${RESET} Verifying key tools..."
-
-echo -e "${CYAN}${BOLD}[>]${RESET} Python: $(python3 --version)"
-echo -e "${CYAN}${BOLD}[>]${RESET} Pip: $(python3 -m pip --version)"
-
-MINGW_VER=$(x86_64-w64-mingw32-gcc --version 2>/dev/null | head -n1 || echo "mingw-w64 not found.")
-
-echo -e "${GREEN}${BOLD}[+]${RESET} ${MINGW_VER}"
+echo -e "${BLUE}${BOLD}[*]${RESET} Verifying key tools..."
+echo -e "${BLUE}${BOLD}[>]${RESET} Python: $(python3 --version)"
+echo -e "${BLUE}${BOLD}[>]${RESET} Pip: $(python3 -m pip --version)"
 
 if command -v msfvenom >/dev/null 2>&1; then
   echo -e "${GREEN}${BOLD}[+]${RESET} ${BLUE}Msfvenom${RESET} $(command -v msfvenom)"
@@ -172,11 +164,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TOOL_PATH="$SCRIPT_DIR/WXxploit.py"
 CMD_PATH="/usr/local/bin/wxxploit"
 
-read -p "$(echo -e "${CYAN}${BOLD}[*]${RESET} Add '${RED}wxxploit${RESET}' command to system? (Y/N) > ")" INSTALL_CMD
+read -p "$(echo -e "${BLUE}${BOLD}[*]${RESET} Add '${RED}wxxploit${RESET}' command to system? (Y/N) > ")" INSTALL_CMD
 
 while [[ ! "$INSTALL_CMD" =~ ^[YyNn]$ ]]; do
     echo -e "${RED}${BOLD}[-]${RESET} Please enter 'Y' or 'N'."
-    read -p "$(echo -e "${CYAN}${BOLD}[*]${RESET} Add '${RED}wxxploit${RESET}' command to system? (Y/N) > ")" INSTALL_CMD
+    read -p "$(echo -e "${BLUE}${BOLD}[*]${RESET} Add '${RED}wxxploit${RESET}' command to system? (Y/N) > ")" INSTALL_CMD
 done
 
 if [[ "$INSTALL_CMD" =~ ^[Yy]$ ]]; then
@@ -184,7 +176,7 @@ if [[ "$INSTALL_CMD" =~ ^[Yy]$ ]]; then
     echo -e "${YELLOW}${BOLD}[!]${RESET} The command 'wxxploit' already exists. Overwriting..."
   fi
 
-  echo -e "${CYAN}${BOLD}[*]${RESET} Creating launcher..."
+  echo -e "${BLUE}${BOLD}[*]${RESET} Creating launcher..."
 
   cat << EOF > "$CMD_PATH"
 #!/usr/bin/env bash
@@ -194,7 +186,7 @@ EOF
   chmod +x "$CMD_PATH"
 
   echo -e "${GREEN}${BOLD}[+]${RESET} Command installed!"
-  echo -e "${CYAN}${BOLD}[*]${RESET} Run > ${RED}${BOLD}wxxploit${RESET}"
+  echo -e "${BLUE}${BOLD}[*]${RESET} Run > ${RED}${BOLD}wxxploit${RESET}"
 
 else
   echo -e "${YELLOW}${BOLD}[!]${RESET} Command installation skipped."
@@ -202,11 +194,11 @@ fi
 
 echo -e "${GREEN}${BOLD}[+]${RESET} Virtual environment ready."
 
-echo -e "${CYAN}${BOLD}[*]${RESET} To activate the virtual environment run:"
+echo -e "${BLUE}${BOLD}[*]${RESET} To activate the virtual environment run:"
 echo -e "    ${YELLOW}${BOLD}source venv/bin/activate${RESET}"
 
-echo -e "${CYAN}${BOLD}[*]${RESET} Then start the tool with:"
-echo -e "    ${RED}${BOLD}python3 WXxploit.py${RESET} ${CYAN}or${RESET} ${RED}${BOLD}wxxploit${RESET}"
+echo -e "${BLUE}${BOLD}[*]${RESET} Then start the tool with:"
+echo -e "    ${RED}${BOLD}python3 WXxploit.py${RESET} ${BLUE}or${RESET} ${RED}${BOLD}wxxploit${RESET}"
 
 echo -e "${CYAN}${BOLD}[*]${RESET} To deactivate the environment run:"
 echo -e "    ${CYAN}${BOLD}deactivate${RESET}"
