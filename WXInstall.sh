@@ -11,7 +11,6 @@ BOLD=$'\033[1m'
 RESET=$'\033[0m'
 RED=$'\033[1;31m'
 BLUE=$'\033[1;34m'
-CYAN=$'\033[1;36m'
 GREEN=$'\033[1;32m'
 YELLOW=$'\033[1;33m'
 
@@ -35,7 +34,7 @@ cat << "WXInstall"
 WXInstall
 echo -e "${RESET}"
 
-echo -e "${CYAN}${BOLD}[*]${RESET} ${RED}${BOLD}WXxploit${RESET} installer started..."
+echo -e "${BLUE}${BOLD}[~]${RESET} ${RED}${BOLD}WXxploit${RESET} installer started..."
 
 SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
 
@@ -149,8 +148,8 @@ for pkg in "${!PKGS[@]}"; do
 done
 
 echo -e "${BLUE}${BOLD}[*]${RESET} Verifying key tools..."
-echo -e "${BLUE}${BOLD}[>]${RESET} Python: $(python3 --version)"
-echo -e "${BLUE}${BOLD}[>]${RESET} Pip: $(python3 -m pip --version)"
+echo -e "${BLUE}${BOLD}[>]${RESET} Python -> $(python3 --version)"
+echo -e "${BLUE}${BOLD}[>]${RESET} Pip -> $(python3 -m pip --version)"
 
 if command -v msfvenom >/dev/null 2>&1; then
   echo -e "${GREEN}${BOLD}[+]${RESET} ${BLUE}Msfvenom${RESET} $(command -v msfvenom)"
@@ -173,7 +172,7 @@ done
 
 if [[ "$INSTALL_CMD" =~ ^[Yy]$ ]]; then
   if [ -f "$CMD_PATH" ]; then
-    echo -e "${YELLOW}${BOLD}[!]${RESET} The command 'wxxploit' already exists. Overwriting..."
+    echo -e "${YELLOW}${BOLD}[!]${RESET} The command '${RED}wxxploit${RESET}'' already exists. Overwriting..."
   fi
 
   echo -e "${BLUE}${BOLD}[*]${RESET} Creating launcher..."
@@ -193,14 +192,13 @@ else
 fi
 
 echo -e "${GREEN}${BOLD}[+]${RESET} Virtual environment ready."
-
 echo -e "${BLUE}${BOLD}[*]${RESET} To activate the virtual environment run:"
 echo -e "    ${YELLOW}${BOLD}source venv/bin/activate${RESET}"
 
 echo -e "${BLUE}${BOLD}[*]${RESET} Then start the tool with:"
 echo -e "    ${RED}${BOLD}python3 WXxploit.py${RESET} ${BLUE}or${RESET} ${RED}${BOLD}wxxploit${RESET}"
 
-echo -e "${CYAN}${BOLD}[*]${RESET} To deactivate the environment run:"
-echo -e "    ${CYAN}${BOLD}deactivate${RESET}"
+echo -e "${BLUE}${BOLD}[*]${RESET} To deactivate the environment run:"
+echo -e "    ${YELLOW}${BOLD}deactivate${RESET}"
 
 exit 0
