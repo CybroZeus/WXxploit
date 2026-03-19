@@ -37,26 +37,22 @@ echo -e "${RESET}"
 echo -e "${BLUE}${BOLD}[~]${RESET} ${RED}${BOLD}WXxploit${RESET} installer started..."
 
 SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
-
 if [ -f "$SCRIPT_PATH" ]; then
   chmod +x "$SCRIPT_PATH" 2>/dev/null || true
 fi
 
 find . -maxdepth 1 -type f -name "*.sh" -exec chmod +x {} \;
-
 for p in "WXxploit.py"; do
   [ -f "$p" ] && chmod +x "$p" 2>/dev/null || true
 done
 
 echo -e "${BLUE}${BOLD}[*]${RESET} Updating package lists..."
-
 if ! apt-get update -y >/dev/null 2>&1; then
   echo -e "${YELLOW}${BOLD}[!]${RESET} apt-get update failed — retrying..."
   apt-get update || { echo -e "${RED}${BOLD}[-]${RESET} apt-get update failed."; exit 1; }
 fi
 
 echo -e "${BLUE}${BOLD}[*]${RESET} Installing required packages..."
-
 apt-get install -y python3 python3-venv python3-pip build-essential wget git >/dev/null 2>&1 || {
   echo -e "${YELLOW}${BOLD}[!]${RESET} Some packages failed, retrying..."
   apt-get install -y python3 python3-venv python3-pip build-essential wget git || {
@@ -69,7 +65,6 @@ declare -A PKGS
 PKGS[metasploit-framework]=msfconsole
 
 check_and_install_pkg() {
-
   local pkg="$1"
   local cmd="$2"
 
@@ -79,7 +74,6 @@ check_and_install_pkg() {
   fi
 
   echo -e "${YELLOW}${BOLD}[!]${RESET} $pkg not found — installing..."
-
   if ! apt-get install -y "$pkg"; then
     echo -e "${RED}${BOLD}[-]${RESET} Installation of $pkg failed."
     return 1
@@ -94,13 +88,11 @@ check_and_install_pkg() {
 }
 
 echo -e "${BLUE}${BOLD}[*]${RESET} Checking & installing packages..."
-
 for pkg in "${!PKGS[@]}"; do
   check_and_install_pkg "$pkg" "${PKGS[$pkg]}" || true
 done
 
 VENV_DIR="venv"
-
 if [ -d "$VENV_DIR" ]; then
   echo -e "${BLUE}${BOLD}[*]${RESET} Virtualenv exists, reusing..."
 else
@@ -114,7 +106,6 @@ fi
 source "$VENV_DIR/bin/activate"
 
 echo -e "${BLUE}${BOLD}[*]${RESET} Upgrading pip..."
-
 python3 -m pip install --upgrade pip >/dev/null 2>&1 || {
   echo -e "${YELLOW}${BOLD}[!]${RESET} pip upgrade warning..."
   python3 -m pip install --upgrade pip || {
@@ -126,7 +117,6 @@ python3 -m pip install --upgrade pip >/dev/null 2>&1 || {
 PY_PKGS=(colorama pystyle)
 
 echo -e "${BLUE}${BOLD}[*]${RESET} Installing Python packages..."
-
 python3 -m pip install "${PY_PKGS[@]}" >/dev/null 2>&1 || {
   echo -e "${YELLOW}${BOLD}[!]${RESET} pip retry..."
   python3 -m pip install "${PY_PKGS[@]}" || {
@@ -136,7 +126,6 @@ python3 -m pip install "${PY_PKGS[@]}" >/dev/null 2>&1 || {
 }
 
 echo -e "${BLUE}${BOLD}[*]${RESET} Tools status:"
-
 for pkg in "${!PKGS[@]}"; do
   cmd="${PKGS[$pkg]}"
   path=$(command -v "$cmd" 2>/dev/null || true)
@@ -176,7 +165,6 @@ if [[ "$INSTALL_CMD" =~ ^[Yy]$ ]]; then
   fi
 
   echo -e "${BLUE}${BOLD}[*]${RESET} Creating launcher..."
-
   cat << EOF > "$CMD_PATH"
 #!/usr/bin/env bash
 python3 "$TOOL_PATH" "\$@"
@@ -185,7 +173,7 @@ EOF
   chmod +x "$CMD_PATH"
 
   echo -e "${GREEN}${BOLD}[+]${RESET} Command installed!"
-  echo -e "${BLUE}${BOLD}[*]${RESET} Run > ${RED}${BOLD}wxxploit${RESET}"
+  echo -e "${BLUE}${BOLD}[*]${RESET} To run > ${RED}${BOLD}wxxploit${RESET}"
 
 else
   echo -e "${YELLOW}${BOLD}[!]${RESET} Command installation skipped."
